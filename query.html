@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+	<link rel="stylesheet" href="../Main2/css/query.css" />
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<script src="../Main2/js/jquery-3.3.1.min.js"></script>
+    <link href="../Main2/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../Main2/js/bootstrap/js/bootstrap.min.js"></script>
+<title>无标题文档</title>
+</head>
+
+<body>
+	<div style="float:left;width:300px;">
+	<!-- 树形导航 -->
+    <div class="innerUl" id="inner"></div>
+    </div>
+	<!-- 右侧 -->
+	<div class="right">
+	<div class="block1">知识内容</div>
+	<table id="t1" cellspacing="0" border="1" style="width:500px;margin-top:20px"></table>
+	</div>
+	<script type="text/javascript" src="../Main2/js/proTree.js"></script>
+	<script type="text/javascript" src="../Main2/js/zsnr.js"></script>
+<script type="text/javascript">
+//后台传入的 标题列表
+    var arr = [];
+    var larr=[];
+    var Jarr=[];
+    $(document).ready(function () {
+        $.get("../Main2/php/get.php", function (data) {
+            arr = JSON.parse(data);
+            Jarr = JSON.parse(data);
+            var arr1=[];var arr2=[];var arr3=[];var arr4=[];
+            for(var i=0;i<arr.length;i++){
+                if(arr[i].pid==0){
+                    arr1=arr1.concat(arr[i]);
+                }
+            }
+            for(var i=0;i<arr1.length;i++){
+                for(var j=0;j<arr.length;j++){
+                    if(arr[j].pid==arr1[i].id){
+                        arr2=arr2.concat(arr[j]);
+                    }
+                }
+            }
+            for(var i=0;i<arr2.length;i++){
+                for(var j=0;j<arr.length;j++){
+                    if(arr[j].pid==arr2[i].id){
+                        arr3=arr3.concat(arr[j]);
+                    }
+                }
+            }
+            for(var i=0;i<arr3.length;i++){
+                for(var j=0;j<arr.length;j++){
+                    if(arr[j].pid==arr3[i].id){
+                        arr4=arr4.concat(arr[j]);
+                    }
+                }
+            }
+            arr.splice(0,arr.length);
+            larr=larr.concat(arr4);
+            arr=arr.concat(arr1).concat(arr2).concat(arr3).concat(arr4);
+
+
+
+            //集成bootstrap 的图标
+            $(".innerUl").ProTree({
+                arr: arr,
+                simIcon: "fa fa-angle-right",
+                mouIconOpen: "fa fa-angle-down",
+                mouIconClose: "fa fa-angle-right",
+                callback: function (id, name) {
+                    cid = id;
+                    var arrx = farr(id);
+                    $("#GID").val(id);
+                    c1(arrx);  //创建电压表格
+                    c2(arrx);  //创建电流
+                    c3(arrx);  //pt
+                    c4(arrx);  //电能表
+                    c5(arrx);  //电流合并
+                    c6(arrx);  //电压合并
+                }
+            });
+        });
+    });
+
+    function ptjxs(){
+        var fs=$("#ptsel").val();
+        if(fs=="三相三线"){
+            $('#pt33').css('display','block');
+            $('#sbjc').css('display','none');
+            $('#pts').css('visibility','visible');
+            $('#pt34').css('display','none');
+        }if(fs=="三相四线"){
+            $('#pt33').css('display','none');
+            $('#sbjc').css('display','none');
+            $('#pts').css('visibility','visible');
+            $('#pt34').css('display','block');
+        }
+    }	
+	
+</script>
+</body>
+</html>
